@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.cryptotrackerapp.model.Asset
@@ -34,7 +35,7 @@ import com.example.cryptotrackerapp.viewmodel.AssetsViewModel
 
 
 @Composable
-fun AssetsList(viewModel: AssetsViewModel, navHostController: NavHostController) {
+fun AssetsList(viewModel: AssetsViewModel = hiltViewModel(), navHostController: NavHostController) {
 
     val assets = viewModel.assets
 

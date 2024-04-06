@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.example.cryptotrackerapp.data.AssetsRepository
 import com.example.cryptotrackerapp.model.Asset
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import javax.inject.Inject
 
-class AssetsViewModel: ViewModel() {
+@HiltViewModel
+class AssetsViewModel @Inject constructor() : ViewModel() {
     private val assetsRepository = AssetsRepository()
 
     var assets = mutableStateListOf<Asset>()
