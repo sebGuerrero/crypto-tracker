@@ -6,6 +6,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -53,8 +54,23 @@ fun LoginScreen(viewModel: LoginViewModel) {
     }
 }
 
+@Composable
+fun UserScreen(viewModel: LoginViewModel) {
+
+    val uiState by viewModel.uiState
+
+    LaunchedEffect(Unit) {
+        viewModel.readUser()
+    }
+
+    Column {
+        Text(text = uiState.name)
+        Text(text = uiState.lastname)
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewLoginScreen() {
-    LoginScreen(viewModel = LoginViewModel())
+    UserScreen(viewModel = LoginViewModel())
 }
