@@ -1,0 +1,60 @@
+package com.example.cryptotrackerapp.view
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.cryptotrackerapp.viewmodel.LoginViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.cryptotrackerapp.viewmodel.User
+
+@Composable
+fun LoginScreen(viewModel: LoginViewModel) {
+
+    var email by remember {
+        mutableStateOf("")
+    }
+
+    var password by remember {
+        mutableStateOf("")
+    }
+    var name by remember {
+        mutableStateOf("")
+    }
+    var lastname by remember {
+        mutableStateOf("")
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        TextField(value = email, onValueChange = { email = it }, label = { Text(text = "email") })
+        TextField(value = password, onValueChange = { password = it }, label = { Text(text = "password") })
+        TextField(value = name, onValueChange = { name = it }, label = { Text(text = "name") })
+        TextField(value = lastname, onValueChange = { lastname = it }, label = { Text(text = "lastaname") })
+
+        Button(onClick = {
+            viewModel.registerUser(
+                User(name, lastname),
+                email,
+                password
+            )
+        }) {
+            Text("Register")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLoginScreen() {
+    LoginScreen(viewModel = LoginViewModel())
+}
