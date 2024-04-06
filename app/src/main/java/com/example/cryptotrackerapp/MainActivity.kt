@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cryptotrackerapp.ui.theme.CryptoTrackerAppTheme
-import com.example.cryptotrackerapp.view.AssetsList
+import com.example.cryptotrackerapp.view.MainScreen
 import com.example.cryptotrackerapp.viewmodel.AssetsViewModel
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AssetsList(viewModel = viewModel)
+                    MainScreen(assetsViewModel = viewModel)
                 }
             }
         }

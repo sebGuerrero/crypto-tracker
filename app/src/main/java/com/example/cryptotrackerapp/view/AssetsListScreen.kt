@@ -1,6 +1,7 @@
 package com.example.cryptotrackerapp.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,13 +27,14 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.cryptotrackerapp.model.Asset
 import com.example.cryptotrackerapp.viewmodel.AssetsViewModel
 
 
 @Composable
-fun AssetsList(viewModel: AssetsViewModel) {
+fun AssetsList(viewModel: AssetsViewModel, navHostController: NavHostController) {
 
     val assets = viewModel.assets
 
@@ -47,7 +49,9 @@ fun AssetsList(viewModel: AssetsViewModel) {
     ) {
         
         items(assets) {currentAsset ->
-            AssetRow(asset = currentAsset)
+            AssetRow(asset = currentAsset) { assetId ->
+                navHostController.navigate("${BottomNavItem.Home.route}/$assetId")
+            }
             Divider()
         }
         
@@ -74,12 +78,13 @@ fun AssetsList(viewModel: AssetsViewModel) {
 }
 
 @Composable
-fun AssetRow(asset: Asset) {
+fun AssetRow(asset: Asset, onClick:(String) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp)
+            .clickable { onClick(asset.id) }
     ) {
 
         Box(
@@ -135,11 +140,11 @@ fun AssetRow(asset: Asset) {
     }
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
-@Composable
-fun AssetListPreview () {
-    AssetsList(AssetsViewModel())
-}
+//@Preview(
+//    showBackground = true,
+//    showSystemUi = true
+//)
+//@Composable
+//fun AssetListPreview () {
+//    AssetsList(AssetsViewModel())
+//}
