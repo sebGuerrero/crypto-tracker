@@ -12,9 +12,9 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class AssetsViewModel @Inject constructor() : ViewModel() {
-    private val assetsRepository = AssetsRepository()
-
+class AssetsViewModel @Inject constructor(
+    private val assetsRepository: AssetsRepository
+) : ViewModel() {
     var assets = mutableStateListOf<Asset>()
     fun fetchAssets() {
         viewModelScope.launch {

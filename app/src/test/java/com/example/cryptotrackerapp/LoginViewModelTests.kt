@@ -4,59 +4,52 @@ import com.example.cryptotrackerapp.data.AuthenticationRepository
 import com.example.cryptotrackerapp.model.LoginUIState
 import com.example.cryptotrackerapp.model.User
 import com.example.cryptotrackerapp.viewmodel.LoginViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
 
+@Suppress("UNCHECKED_CAST")
+@ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
 class LoginViewModelTests {
 
     private lateinit var viewModel: LoginViewModel
-
-    @Mock
-    private val mockRepository: AuthenticationRepository = Mockito.mock(AuthenticationRepository::class.java)
+    private lateinit var authRepository: AuthenticationRepository
 
     @Before
     fun setUp() {
-        viewModel = LoginViewModel(mockRepository)
+        authRepository = Mockito.mock()
+
+        viewModel = LoginViewModel(authRepository)
     }
 
     @Test
-    fun registerUser_success() {
+    fun registerUser_success() = runTest {
         // Given
         val user = User("nameTest", "lastNameTest")
         val email = "email@email.com"
         val password = "password"
+        val userId = "testUserId"
 
-//        Mockito.doAnswer { invocation ->
-//            val callback: (String?) -> Unit = invocation.getArgument(3)
-//            callback("testId")
-//        }
-//            .`when`(mockRepository)
-//            .registerUser(user, email, password, onComplete = { "testId" } )
-
-        Mockito.`when`(
-            mockRepository.registerUser(user, email, password, { })
-        ).thenAnswer { invocation ->
-            val callback: (String?) -> Unit = invocation.getArgument(3)
-            callback("testId")
-        }
+        whenever(authRepository.registerUser(eq(user), eq(email), eq(password), any()))
+            .thenAnswer {
+                (it.arguments[3] as (String?) -> Unit).invoke(userId)
+            }
 
         // When
-        viewModel.registerUser(user,  email, password)
+        viewModel.registerUser(user, email, password)
 
         // Then
-        assertEquals(
-            LoginUIState(user.name, user.lastname),
-            viewModel.uiState
-        )
+        assertEquals(user.name, viewModel.uiState.name)
+        assertEquals(user.lastname, viewModel.uiState.lastname)
     }
 
     @Test

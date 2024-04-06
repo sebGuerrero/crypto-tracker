@@ -19,18 +19,11 @@ class LoginViewModel(private val authRepository: AuthenticationRepository): View
     val TAG = "LoginViewModel"
     private lateinit var auth: FirebaseAuth
 
-//    S
-//    O
-//    L
-//    I
-//    Dependency inversion
-//        -> Concretas
-//        -> Abstractas
-
     fun registerUser(user: User, email: String, password: String) {
         authRepository.registerUser(user, email, password) { userId ->
             val id = userId?.let { notNilId ->
-                saveUser(notNilId, user)
+//                saveUser(notNilId, user)
+                uiState = LoginUIState(user.name, user.lastname)
             } ?: run {
                 errorMessage = "Error registering the User"
             }
