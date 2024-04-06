@@ -7,38 +7,39 @@ import androidx.lifecycle.ViewModel
 import com.example.cryptotrackerapp.model.LoginUIState
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import androidx.compose.runtime.getValue
+import com.example.cryptotrackerapp.data.AuthenticationRepository
+import com.example.cryptotrackerapp.model.User
 
-data class User(
-    val name: String,
-    val lastname: String
-)
-class LoginViewModel: ViewModel() {
-    var uiState = mutableStateOf(LoginUIState())
+class LoginViewModel(private val authRepository: AuthenticationRepository): ViewModel() {
+    var uiState by mutableStateOf(LoginUIState())
+    var errorMessage by mutableStateOf(String())
+
     val TAG = "LoginViewModel"
     private lateinit var auth: FirebaseAuth
 
     fun registerUser(user: User, email: String, password: String) {
-        auth = Firebase.auth
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val currentUser = auth.currentUser
-                    saveUser(currentUser?.uid ?: "no-id", user)
-                } else {
-                    Log.w(
-                        TAG,
-                        "registerUser:failure",
-                        task.exception
-                    )
-                }
+        authRepository.registerUser(user, email, password) { userId ->
+            val id = userId?.let { notNilId ->
+//                saveUser(notNilId, user)
+                uiState = LoginUIState(user.name, user.lastname)
+            } ?: run {
+                errorMessage = "Error registering the User"
             }
+        }
     }
 
     private fun saveUser(userId: String, user: User) {
-        val db = Firebase.firestore
-        db.collection("users").document(userId).set(user)
+        uiState = LoginUIState(user.name, user.lastname)
+//        val db = Firebase.firestore
+//        db.collection("users").document(userId).set(user).addOnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                uiState = LoginUIState(user.name, user.lastname)
+//            } else {
+//                errorMessage = "Error almacenando data del usuario"
+//            }
+//        }
     }
 
     fun readUser() {
@@ -62,7 +63,7 @@ class LoginViewModel: ViewModel() {
                 val name = snapshot.get("name").toString()
                 val lastname = snapshot.get("lastname").toString()
 
-                uiState.value = LoginUIState(name, lastname)
+                uiState = LoginUIState(name, lastname)
 
             } else {
                 Log.d(TAG, "$source data: null")

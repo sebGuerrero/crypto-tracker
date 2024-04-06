@@ -1,11 +1,9 @@
 package com.example.cryptotrackerapp.view
 
 import android.annotation.SuppressLint
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -35,14 +33,14 @@ import androidx.compose.runtime.setValue
 import com.example.cryptotrackerapp.viewmodel.AssetsViewModel
 
 @Composable
-fun HomeScreen(viewModel: AssetsViewModel, navController: NavHostController) {
+fun HomeScreen(navController: NavHostController) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
     ) {
-        AssetsList(viewModel, navController)
+        AssetsList(navHostController = navController)
     }
 }
 
@@ -99,10 +97,10 @@ fun DetailScreen(assetId: String, navController: NavHostController) {
 }
 
 @Composable
-fun NavigationGraph(assetsViewModel: AssetsViewModel, navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController) {
     val assetIdKey = "assetId"
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
-        composable(BottomNavItem.Home.route) { HomeScreen(assetsViewModel, navController) }
+        composable(BottomNavItem.Home.route) { HomeScreen(navController) }
         composable(BottomNavItem.Favourites.route) { FavouritesScreen() }
         composable(BottomNavItem.Profile.route) { ProfileScreen() }
         composable("${BottomNavItem.Home.route}/{$assetIdKey}") {backStackEntry ->
@@ -116,12 +114,12 @@ fun NavigationGraph(assetsViewModel: AssetsViewModel, navController: NavHostCont
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(assetsViewModel: AssetsViewModel) {
+fun MainScreen() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar =  { BottomTabBar(navController = navController) }
     ) {
-        NavigationGraph(assetsViewModel, navController)
+        NavigationGraph(navController)
     }
 }
 
@@ -172,7 +170,7 @@ fun BottomTabBar(navController: NavHostController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewMain() {
-    MainScreen(assetsViewModel = AssetsViewModel())
+    MainScreen()
 }
 
 

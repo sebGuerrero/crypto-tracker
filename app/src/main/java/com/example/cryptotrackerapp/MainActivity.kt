@@ -14,10 +14,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.cryptotrackerapp.ui.theme.CryptoTrackerAppTheme
 import com.example.cryptotrackerapp.view.MainScreen
 import com.example.cryptotrackerapp.viewmodel.AssetsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: AssetsViewModel by viewModels()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(assetsViewModel = viewModel)
+                    MainScreen()
                 }
             }
         }
